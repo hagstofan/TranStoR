@@ -1,0 +1,9 @@
+Package: TranStoR
+Title: Rules-translation from SQL to R for Validation package
+Description:Translation of sql syntax to R syntax of validate rules for data cleaning project.
+Version: 0.1
+Author: Garðar Páll Gíslason
+Depends: R (>= 3.1.0)
+LazyData: true
+Imports:RODBC
+RoxygenNote: 6.1.1
