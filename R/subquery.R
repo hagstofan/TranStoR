@@ -2,7 +2,11 @@
 #' 
 #' dftranslation 
 #' @param 
-#' dataframe with two columns as validate package required, server and databasename for the supqueries and case values
+#' dataframe with two columns as validate package required. 
+#' @param 
+#' Server for the supqueries and case values
+#' @param 
+#' Databasename for the supqueries and case values
 #' 
 #' @return 
 #' list of dataframes, first is a dataframe with the rules and labels for each rule. The rest is data frames of each values or output from subquery and case statement.
