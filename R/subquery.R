@@ -1,21 +1,11 @@
-
-
-#setGeneric("subquery")
-# First making some usable functions to use.
-# Making variables
-# assembly
-# '%&%' <- function(x, y)paste0(x,y)
-## if there is nothing before or after is null there will be nothing
-#cleanna <- function(x) {ifelse(is.na(x), "", x)}
-## If there is more than one IS NULL in the sql string
-#ecountnull <- function(x){ifelse(length(grep("IS NULL", x))==2,cleanna(word(sapply(strsplit(x, " IS NULL"),"[",2),1,-2)) %&% " is.null(" %&% word(sapply(strsplit(x, " IS NULL"),"[",2),-1) %&% ")=TRUE",cleanna(sapply(strsplit(x, " IS NULL"),"[",2)))}
-## If there is more than one IS NOT NULL in the sql string
-#ecountnotnull <- function(x){ifelse(length(grep("IS NOT NULL", x))==2,cleanna(word(sapply(strsplit(x, " IS NOT NULL"),"[",2),1,-2)) %&% " is.null(" %&% word(sapply(strsplit(x, " IS NOT NULL"),"[",2),-1) %&% ")=FALSE",cleanna(sapply(strsplit(x, " IS NOT NULL"),"[",2)))}
-
 #' dftranslation
 #' 
-#' dftranslation
-#'
+#' dftranslation 
+#' @param 
+#' dataframe with two columns as validate package required, server and databasename for the supqueries and case values
+#' 
+#' @return 
+#' list of dataframes, first is a dataframe with the rules and labels for each rule. The rest is data frames of each values or output from subquery and case statement.
 #' @export
 #setMethod(
 dftranslation <- function(df,server,databasename){
