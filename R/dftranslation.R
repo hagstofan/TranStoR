@@ -61,7 +61,7 @@ dftranslation <- function(df,server,databasename){
               li<-gsub("^\\(","",li)
               d1 <- sqlQuery(databases,li, stringsAsFactors = FALSE)
               odbcClose(databases)
-              li <- gsub("\\(","\\\\(",li)sq
+              li <- gsub("\\(","\\\\(",li)
               li <- gsub("\\)","\\\\)",li)
             }
             # dfList[[listnr]] <-assign(gsub("(.*?SELECT )|(FROM .*)","",li,perl = TRUE),d1)
