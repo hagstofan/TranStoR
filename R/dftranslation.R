@@ -11,7 +11,6 @@
 #' @return 
 #' list of dataframes, first is a dataframe with the rules and labels for each rule. The rest is data frames of each values or output from subquery and case statement.
 #' @export
-#setMethod(
 dftranslation <- function(df,server,databasename){
   # Making variables
   # assembly
@@ -25,10 +24,13 @@ dftranslation <- function(df,server,databasename){
   # býr til röð af id fyrir for loopuna
   var <- seq(1, nrow(df))
   
-  #dflist[[1]]["new"] <- var
+  
+  if(!("rule" %in% colnames(df)))
+  {
+    stop("Check the columns name")
+  }
   df["new"] <- var
   dfList <- list()
-  #start.time <- Sys.time()
   listnr <-2
   for(val in var)
   {
@@ -59,7 +61,7 @@ dftranslation <- function(df,server,databasename){
               li<-gsub("^\\(","",li)
               d1 <- sqlQuery(databases,li, stringsAsFactors = FALSE)
               odbcClose(databases)
-              li <- gsub("\\(","\\\\(",li)
+              li <- gsub("\\(","\\\\(",li)sq
               li <- gsub("\\)","\\\\)",li)
             }
             # dfList[[listnr]] <-assign(gsub("(.*?SELECT )|(FROM .*)","",li,perl = TRUE),d1)
