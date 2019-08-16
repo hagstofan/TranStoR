@@ -11,7 +11,7 @@
 #' @return 
 #' list of dataframes, first is a dataframe with the rules and labels for each rule. The rest is data frames of each values or output from subquery and case statement.
 #' @export
-dftranslation <- function(df,server,databasename){
+dfTranslation <- function(df,dbengine=1,server,databasename){
   # Making variables
   # assembly
   '%&%' <- function(x, y)paste0(x,y)
@@ -24,16 +24,36 @@ dftranslation <- function(df,server,databasename){
   # býr til röð af id fyrir for loopuna
   var <- seq(1, nrow(df))
   
-  
+  # check if stringr is in use
+  if("stringr" %in% (.packages())==FALSE)
+  {
+    stop("This package need Stringr package")
+  }
+  # if the column names are not right
   if(!("rule" %in% colnames(df)))
   {
     stop("Check the columns name")
   }
+  
+  # check the database engine
+  if (dbengine ==2) {
+    engine<- 'PostgreSQL'
+  } else if (dbengine ==3) {
+    engine<- 'MySQL ODBC 5.1 Driver'
+  }else{
+    engine<- 'SQL Server'
+  }
+  
   df["new"] <- var
   dfList <- list()
   listnr <-2
   for(val in var)
   {
+    # check if RODBC is in use
+    if("RODBC" %in% (.packages())==FALSE)
+    {
+      stop("This package need RODBC package")
+    }
     # Checking if each line has Select in the string
     #if(grepl("SELECT",dflist[[1]][val,1], perl=TRUE)==TRUE)
     if(grepl("SELECT",df[val,1], perl=TRUE)==TRUE)
@@ -52,12 +72,12 @@ dftranslation <- function(df,server,databasename){
           if(grepl("SELECT",mlines[n],perl = T)==T)
           {
             li <-mlines[n]
-            databases <- odbcDriverConnect(paste0("DRIVER={SQL Server}; SERVER=",server,"; trusted_connection=true;database=",databasename))
+            databases <- odbcDriverConnect(paste0("DRIVER={",engine,"}; SERVER=",server,"; trusted_connection=true;database=",databasename))
             d1 <- sqlQuery(databases,li, stringsAsFactors = FALSE)
             odbcClose(databases)
             if(grepl("[Microsoft][ODBC SQL Server Driver][SQL Server]",d1[[1]][1]))
             {
-              databases <- odbcDriverConnect(paste0("DRIVER={SQL Server}; SERVER=",server,"; trusted_connection=true;database=",databasename))
+              databases <- odbcDriverConnect(paste0("DRIVER={",engine,"}; SERVER=",server,"; trusted_connection=true;database=",databasename))
               li<-gsub("^\\(","",li)
               d1 <- sqlQuery(databases,li, stringsAsFactors = FALSE)
               odbcClose(databases)
@@ -82,14 +102,14 @@ dftranslation <- function(df,server,databasename){
       {
         #li <-gsub(".*\\((?=SELECT)|\\)\\sAND+.*|\\)\\sOR+.*|\\)$", "",dflist[[1]][val,1], perl = TRUE)
         li <-gsub(".*\\((?=SELECT)|\\)\\sAND+.*|\\)\\sOR+.*|\\)$", "",df[val,1], perl = TRUE)
-        databases <- odbcDriverConnect(paste0("DRIVER={SQL Server}; SERVER=",server,"; trusted_connection=true;database=",databasename))
+        databases <- odbcDriverConnect(paste0("DRIVER={",engine,"}; SERVER=",server,"; trusted_connection=true;database=",databasename))
         d1 <- sqlQuery(databases,li, stringsAsFactors = FALSE)
         odbcClose(databases)
         if(grepl("[Microsoft][ODBC SQL Server Driver][SQL Server]",d1[[1]][1]))
         {
           #li <-gsub(".*\\((?=SELECT)|\\)$", "",dflist[[1]][val,1], perl = TRUE)
           li <-gsub(".*\\((?=SELECT)|\\)$", "",df[val,1], perl = TRUE)
-          databases <- odbcDriverConnect(paste0("DRIVER={SQL Server}; SERVER=",server,"; trusted_connection=true;database=",databasename))
+          databases <- odbcDriverConnect(paste0("DRIVER={",engine,"}; SERVER=",server,"; trusted_connection=true;database=",databasename))
           d1 <- sqlQuery(databases,li, stringsAsFactors = FALSE)
           odbcClose(databases)
         }
@@ -111,10 +131,15 @@ dftranslation <- function(df,server,databasename){
   p1 <- 0
   for(val in var)
   {
+    # check if RODBC is in use
+    if("RODBC" %in% (.packages())==FALSE)
+    {
+      stop("This package need RODBC package")
+    }
     if(grepl("CASE",df[val,1], perl=TRUE)==TRUE)
     {
       li <- gsub("^.*(?=CASE)|(?<=END).*","",df[val,1],perl=T)
-      databases <- odbcDriverConnect(paste0("DRIVER={SQL Server}; SERVER=",server,"; trusted_connection=true;database=",databasename))
+      databases <- odbcDriverConnect(paste0("DRIVER={",engine,"}; SERVER=",server,"; trusted_connection=true;database=",databasename))
       d1 <- sqlQuery(databases,paste("SELECT",li,sep = " "), stringsAsFactors = FALSE)
       odbcClose(databases)
       li <- gsub("\\(","\\\\(",li)
