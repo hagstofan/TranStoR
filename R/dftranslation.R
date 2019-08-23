@@ -54,6 +54,14 @@ dfTranslation <- function(df,dbengine=1,server,databasename){
     {
       stop("This package need RODBC package")
     }
+    if("RODBC" %in% (.packages())==FALSE)
+    {
+      stop("This package need RODBC package")
+    }
+    if("RODBC" %in% (.packages())==FALSE)
+    {
+      stop("This package need RODBC package")
+    }
     # Checking if each line has Select in the string
     #if(grepl("SELECT",dflist[[1]][val,1], perl=TRUE)==TRUE)
     if(grepl("SELECT",df[val,1], perl=TRUE)==TRUE)
@@ -159,10 +167,10 @@ dfTranslation <- function(df,dbengine=1,server,databasename){
   # Change RIGHT function 
   df$rule <- gsub("RIGHT\\((.*?),(.*?)\\)" , "substr(\\1,nchar(\\1)-\\2+1,nchar(\\1))", df$rule)
   # IS NULL
-  df$rule[grep(" IS NULL", df$rule, perl = TRUE)] <- gsub("\\s*\\w*$", "", sapply(strsplit(df$rule[grep(" IS NULL", df$rule, perl = TRUE)], " IS NULL"),"[",1)) %&% " is.null(" %&% word(sapply(strsplit(df$rule[grep(" IS NULL", df$rule, perl = TRUE)], " IS NULL"),"[",1),-1) %&% ")=TRUE" %&% ecountnull(df$rule[grep(" IS NULL", df$rule, perl = TRUE)])
+  df$rule[grep(" IS NULL", df$rule, perl = TRUE)] <- gsub('([a-zA-Z!@#$%^&*(),.?":{}|<>Þþ1-9_Ðð]+) IS NULL','is.null(\\1) = FALSE',df$rule[grep(" IS NULL", df$rule, perl = TRUE)])
   
   # IS NOT NULL
-  df$rule[grep(" IS NOT NULL", df$rule, perl = TRUE)] <- gsub("\\s*\\w*$", "", sapply(strsplit(df$rule[grep(" IS NOT NULL", df$rule, perl = TRUE)], " IS NOT NULL"),"[",1)) %&% " is.null(" %&% word(sapply(strsplit(df$rule[grep(" IS NOT NULL", df$rule, perl = TRUE)], " IS NOT NULL"),"[",1),-1) %&% ")=FALSE" %&% ecountnotnull(df$rule[grep(" IS NOT NULL", df$rule, perl = TRUE)])
+  df$rule[grep(" IS NOT NULL", df$rule, perl = TRUE)] <- gsub('([a-zA-Z!@#$%^&*(),.?":{}|<>Þþ1-9_Ðð]+) IS NOT NULL','is.null(\\1) = FALSE',df$rule[grep(" IS NOT NULL", df$rule, perl = TRUE)])
   # set neitun fyrir framan orð
   # df$rule <- gsub('NOT IN ', '%!in% c', df$rule)
   # splitta "ANDis" fyrir "& is"
