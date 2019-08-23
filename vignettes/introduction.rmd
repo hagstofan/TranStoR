@@ -1,6 +1,6 @@
 ---
-title: "Introduction to Validate"
-author: "Mark van der Loo and Edwin de Jonge"
+title: "Rule translation"
+author: "Gardar Pall Gislason"
 date: "`r Sys.Date()`"
 output: 
   rmarkdown::html_vignette:
@@ -17,6 +17,4 @@ library(validate)
 
 ### Introduction
 
-The validate package is intended to make checking your data easy, maintainable
-and reproducible. The package allows you to
-
+Rules-translation from SQL to R for Validation package
