@@ -167,12 +167,12 @@ dfTranslation <- function(df,dbengine=1,server,databasename){
   # Change RIGHT function 
   df$rule <- gsub("RIGHT\\((.*?),(.*?)\\)" , "substr(\\1,nchar(\\1)-\\2+1,nchar(\\1))", df$rule)
   # IS NULL
-  df$rule[grep(" IS NULL", df$rule, perl = TRUE)] <- gsub('([a-zA-Z!@#$%^&*(),.?":{}|<>Þþ1-9_Ðð]+) IS NULL','is.null(\\1) = FALSE',df$rule[grep(" IS NULL", df$rule, perl = TRUE)])
+  df$rule[grep(" IS NULL", df$rule, perl = TRUE)] <- gsub('([a-zA-Z!@#$%^&*(),.?":{}|<>Þþ1-9_ÐðÁá]+) IS NULL','is.null(\\1) = FALSE',df$rule[grep(" IS NULL", df$rule, perl = TRUE)])
   
   # IS NOT NULL
-  df$rule[grep(" IS NOT NULL", df$rule, perl = TRUE)] <- gsub('([a-zA-Z!@#$%^&*(),.?":{}|<>Þþ1-9_Ðð]+) IS NOT NULL','is.null(\\1) = FALSE',df$rule[grep(" IS NOT NULL", df$rule, perl = TRUE)])
+  df$rule[grep(" IS NOT NULL", df$rule, perl = TRUE)] <- gsub('([a-zA-Z!@#$%^&*(),.?":{}|<>Þþ1-9_ÐðÁá]+) IS NOT NULL','is.null(\\1) = FALSE',df$rule[grep(" IS NOT NULL", df$rule, perl = TRUE)])
   # set neitun fyrir framan orð
-  # df$rule <- gsub('NOT IN ', '%!in% c', df$rule)
+  df$rule <- gsub('([a-zA-Z!@#$%^&*(),.?":{}|<>Þþ1-9_ÐðÁá]+) NOT IN ', '!\\1 %in% c', df$rule)
   # splitta "ANDis" fyrir "& is"
   df$rule <- gsub("ANDis", "&& is", df$rule)
   # Skipta út " AND " fyrir " & "
