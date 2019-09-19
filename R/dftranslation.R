@@ -164,21 +164,28 @@ dfTranslation <- function(df,dbengine=1,server,databasename){
   rm(var)
   rm(val)
   df <- subset(df, select = -c(new))
-  # Change RIGHT function 
-  df$rule <- gsub("RIGHT\\((.*?),(.*?)\\)" , "substr(\\1,nchar(\\1)-\\2+1,nchar(\\1))", df$rule)
   # IS NULL
-  df$rule[grep(" IS NULL", df$rule, perl = TRUE)] <- gsub('([a-zA-Z!@#$%^&*(),.?":{}|<>Þþ1-9_ÐðÁá]+) IS NULL','is.null(\\1) = FALSE',df$rule[grep(" IS NULL", df$rule, perl = TRUE)])
+  df$rule[grep(" IS NULL", df$rule, perl = TRUE)] <- gsub('([a-zA-Z!@#$%^&*(),.?":{}|<>Þþ1-9_ÐðÁá+-]+) IS NULL','lapply(\\1,is.null) = TRUE',df$rule[grep(" IS NULL", df$rule, perl = TRUE)])
+  df$rule[grep(" is null", df$rule, perl = TRUE)] <- gsub('([a-zA-Z!@#$%^&*(),.?":{}|<>Þþ1-9_ÐðÁá+-]+) is null','lapply(\\1,is.null) = TRUE',df$rule[grep(" is null", df$rule, perl = TRUE)])
   
   # IS NOT NULL
-  df$rule[grep(" IS NOT NULL", df$rule, perl = TRUE)] <- gsub('([a-zA-Z!@#$%^&*(),.?":{}|<>Þþ1-9_ÐðÁá]+) IS NOT NULL','is.null(\\1) = FALSE',df$rule[grep(" IS NOT NULL", df$rule, perl = TRUE)])
+  df$rule[grep(" IS NOT NULL", df$rule, perl = TRUE)] <- gsub('([a-zA-Z!@#$%^&*(),.?":{}|<>Þþ1-9_ÐðÁá+-]+) IS NOT NULL','lapply(\\1,is.null) = FALSE',df$rule[grep(" IS NOT NULL", df$rule, perl = TRUE)])
+  df$rule[grep(" is not null", df$rule, perl = TRUE)] <- gsub('([a-zA-Z!@#$%^&*(),.?":{}|<>Þþ1-9_ÐðÁá+-]+) is not null','lapply(\\1,is.null) = FALSE',df$rule[grep(" is not null", df$rule, perl = TRUE)])
+  # Change RIGHT function 
+  df$rule <- gsub("RIGHT\\((.*?),(.*?)\\)" , "substr(\\1,nchar(\\1)-\\2+1,nchar(\\1))", df$rule)
   # set neitun fyrir framan orð
   df$rule <- gsub('([a-zA-Z!@#$%^&*(),.?":{}|<>Þþ1-9_ÐðÁá]+) NOT IN ', '!\\1 %in% c', df$rule)
   # splitta "ANDis" fyrir "& is"
-  df$rule <- gsub("ANDis", "&& is", df$rule)
+  df$rule <- gsub("ANDis", "& is", df$rule)
+  df$rule <- gsub("ANDIS", "& is", df$rule)
+  df$rule <- gsub("andis", "& is", df$rule)
+  df$rule <- gsub("andIS", "& is", df$rule)
   # Skipta út " AND " fyrir " & "
-  df$rule <- gsub(" AND ", " && ", df$rule)
+  df$rule <- gsub(" AND ", " & ", df$rule)
+  df$rule <- gsub(" and ", " & ", df$rule)
   # Skipta út " OR " fyrir " | "
   df$rule <- gsub(" OR ", " | ", df$rule)
+  df$rule <- gsub(" or ", " | ", df$rule)
   # =
   df$rule <- gsub("=" , "==", df$rule)
   # skipta úr "<==" fyrir "<="
@@ -189,16 +196,20 @@ dfTranslation <- function(df,dbengine=1,server,databasename){
   # Skipa út NOT
   df$rule <- gsub('(\\S+) NOT(.*?) &&','!(\\1\\2) &&', df$rule)
   df$rule <- gsub('(\\S+) NOT(.*?$)','!(\\1\\2)', df$rule)
+  df$rule <- gsub('(\\S+) not(.*?$)','!(\\1\\2)', df$rule)
   # skipta út " IN " fyrir " %in% "
   df$rule <- gsub(" IN \\(" , " %in% c(", df$rule)
   # skipta út " LIKE " fyrir " NOT LIKE "
   df$rule <- gsub("(\\w+) NOT LIKE '(\\w+)%'" , "!grepl('\\2',\\1)", df$rule)
+  df$rule <- gsub("(\\w+) not like '(\\w+)%'" , "!grepl('\\2',\\1)", df$rule)
   # skipta út " LIKE " fyrir " LIKE "
   df$rule <- gsub("(\\w+) LIKE '(\\w+)%'" , "grepl('\\2',\\1)", df$rule)
+  df$rule <- gsub("(\\w+) like '(\\w+)%'" , "grepl('\\2',\\1)", df$rule)
   # skipta út " <> " fyrir " != "
   df$rule <- gsub(" <> " , " != ", df$rule)
   df$rule <- gsub("(\\w+)  ([0-9])" , "\\1 = \\2", df$rule)
-  df$rule <- gsub("LEN" , "nchar", df$rule)
+  df$rule <- gsub("LEN\\(" , "nchar\\(", df$rule)
+  df$rule <- gsub("len\\(" , "nchar\\(", df$rule)
   dfList[[1]] <- df
   return(dfList)
 }
