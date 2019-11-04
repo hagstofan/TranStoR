@@ -4,14 +4,14 @@
 \alias{dfTranslation}
 \title{dftranslation}
 \usage{
-dfTranslation(df, dbengine = 1, server, databasename)
+dfTranslation(df, demo, dbengine, server, databasename)
 }
 \arguments{
 \item{dataframe}{with two columns as validate package required.}
 
-\item{Server}{for the supqueries and case values}
+\item{Server}{for the subqueries and case values}
 
-\item{Databasename}{for the supqueries and case values}
+\item{Databasename}{for the subqueries and case values}
 }
 \value{
 list of dataframes, first is a dataframe with the rules and labels for each rule. The rest is data frames of each values or output from subquery and case statement.

@@ -7,4 +7,4 @@ Depends: R (>= 3.1.0)
 LazyData: true
 RoxygenNote: 6.1.1
 Imports: RODBC, stringr
-Suggests: dplyr
+Suggests: dplyr, lubridate
