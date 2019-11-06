@@ -174,6 +174,8 @@ dfTranslation <- function(df,demo,dbengine,server,databasename){
   # Change RIGHT function which is FALSE
   df$rule <- gsub("RIGHT\\((.*?),(.*?)\\) != \\((.*?)\\)" , "\\(as.integer(substr(\\1,nchar(\\1)-\\2+1,nchar(\\1))) = as.vector\\(\\3\\)\\) = FALSE", df$rule)
   df$rule <- gsub("RIGHT\\((.*?),(.*?)\\)!=\\((.*?)\\)" , "\\(as.integer(substr(\\1,nchar(\\1)-\\2+1,nchar(\\1))) = as.vector\\(\\3\\)\\) = FALSE", df$rule)
+  # Change Right function with Null
+  df$rule <- gsub("RIGHT\\((.*?),(.*?)\\) IS NULL" , "lapply\\(as.integer(substr(\\1,nchar(\\1)-\\2+1,nchar(\\1))),is.null) = TRUE", df$rule)
   # Change " <> " for " != " for list
   df$rule <- gsub("([a-zA-Z!@#$%^&*(),.?:{}|<>Þþ1-9_ÐðÁá+-]+) <> \\((.*?)\\)" , "(\\1 = (\\2)) = FALSE", df$rule)
   # Change " <> " for " != " for list
