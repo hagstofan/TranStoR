@@ -4,7 +4,7 @@
 \alias{dfTranslation}
 \title{dftranslation}
 \usage{
-dfTranslation(df, demo, dbengine, server, databasename)
+dfTranslation(df, demo, dbengine, server, databasename, login, password)
 }
 \arguments{
 \item{dataframe}{with two columns as validate package required.}
