@@ -205,11 +205,11 @@ dfTranslation <- function(df,demo,dbengine,server,databasename,login,password){
   df$rule <- gsub('([a-zA-Z!@#$%^&*(),.?":{}|<>Þþ1-9_ÐðÁá]+) IN \\((.*?)\\)', '(\\1 %in% c\\(\\2\\)\\)=TRUE', df$rule,perl = TRUE)
   df$rule <- gsub('([a-zA-Z!@#$%^&*(),.?":{}|<>Þþ1-9_ÐðÁá]+) in \\((.*?)\\)', '(\\1 %in% c\\(\\2\\)\\)=TRUE', df$rule,perl = TRUE)
   # skipta út "NOT LIKE " fyrir "grepl FALSE"
-  df$rule <- gsub('(\\w+) NOT LIKE ([a-zA-Z!@#$%^&*(),.?":{}|<>Þþ1-90_ÐðÁá+\'-]+)',"grepl(\\2,\\1)=FALSE", df$rule,perl = TRUE)
-  df$rule <- gsub('(\\w+) not like ([a-zA-Z!@#$%^&*(),.?":{}|<>Þþ1-90_ÐðÁá+\'-]+)' , "grepl(\\2,\\1)=FALSE", df$rule,perl = TRUE)
+  df$rule <- gsub('(\\w+) NOT LIKE ([a-zA-Z!@#$%^&*,.?":{}|<>Þþ1-90_ÐðÁá+\'-]+)',"grepl(\\2,\\1)=FALSE", df$rule,perl = TRUE)
+  df$rule <- gsub('(\\w+) not like ([a-zA-Z!@#$%^&*,.?":{}|<>Þþ1-90_ÐðÁá+\'-]+)' , "grepl(\\2,\\1)=FALSE", df$rule,perl = TRUE)
   # Changing " LIKE " for "grepl TRUE"
-  df$rule <- gsub('(\\w+) LIKE ([a-zA-Z!@#$%^&*(),.?":{}|<>Þþ1-90_ÐðÁá+\'-]+)' , "grepl(\\2,\\1)=TRUE", df$rule,perl = TRUE)
-  df$rule <- gsub('(\\w+) like ([a-zA-Z!@#$%^&*(),.?":{}|<>Þþ1-90_ÐðÁá+\'-]+)' , "grepl(\\2,\\1)=TRUE", df$rule,perl = TRUE)
+  df$rule <- gsub('(\\w+) LIKE ([a-zA-Z!@#$%^&*,.?":{}|<>Þþ1-90_ÐðÁá+\'-]+)' , "grepl(\\2,\\1)=TRUE", df$rule,perl = TRUE)
+  df$rule <- gsub('(\\w+) like ([a-zA-Z!@#$%^&*,.?":{}|<>Þþ1-90_ÐðÁá+\'-]+)' , "grepl(\\2,\\1)=TRUE", df$rule,perl = TRUE)
   
   df$rule <- gsub("(\\w+)  ([0-9])" , "\\1 = \\2", df$rule,perl = TRUE)
   # Changing SQL Length to R number of characters
