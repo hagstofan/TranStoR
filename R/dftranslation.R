@@ -94,10 +94,10 @@ dfTranslation <- function(df,demo,dbengine,server,databasename,login,password){
             rm(d1)
             rm(li)
           }
+          listnr <-listnr +1
         }
         rm(mlines)
         rm(nlines)
-        listnr <-listnr +1
       }
       # If count is one
       else
