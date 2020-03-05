@@ -61,7 +61,7 @@ dfTranslation <- function(df,demo,dbengine,server,databasename,login,password){
       if(str_count(df[val,1],"SELECT")>1)
       {
         # Split sentence into miny sentences
-        mlines <-regmatches(df[val,1], gregexpr("\\(.*?\\)", df[val,1]))[[1]]
+        mlines <-regmatches(df[val,1], gregexpr("\\(([^()]*|\\(([^()]*|\\([^()]*\\))*\\))*\\)", df[val,1]))[[1]]
         # Make sequence of mlines
         nlines <- seq(1, length(mlines))
         
