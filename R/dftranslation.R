@@ -61,7 +61,7 @@ dfTranslation <- function(df,demo,dbengine,server,databasename,login,password){
       if(str_count(df[val,1],"SELECT")>1)
       {
         # Split sentence into miny sentences
-        mlines <-regmatches(df[val,1], gregexpr("\\(([^()]*|\\(([^()]*|\\([^()]*\\))*\\))*\\)", df[val,1]))[[1]]
+        mlines <-regmatches(df[val,1], gregexpr("\\(.*?\\)", df[val,1]))[[1]]
         # Make sequence of mlines
         nlines <- seq(1, length(mlines))
         
@@ -79,18 +79,17 @@ dfTranslation <- function(df,demo,dbengine,server,databasename,login,password){
             d1 <- sqlQuery(databases,li, stringsAsFactors = FALSE)
             # Close 
             odbcClose(databases)
-            if(grepl("[Microsoft][ODBC SQL Server Driver][SQL Server]",d1[[1]][1]))
+            while(grepl("[Microsoft][ODBC SQL Server Driver][SQL Server]",d1[[1]][1]))
             {
               databases <- odbcDriverConnect(paste0("DRIVER={",engine,"}; SERVER=",server,"; UserName = ",login,", Password =",password," ;database=",databasename))
-              li<-gsub("^\\(","",li)
+              li<-gsub("$",")",li)
               d1 <- sqlQuery(databases,li, stringsAsFactors = FALSE)
               odbcClose(databases)
-              li <- gsub("\\(","\\\\(",li,perl = TRUE)
-              li <- gsub("\\)","\\\\)",li,perl = TRUE)
             }
+            li <- gsub("\\(","\\\\(",li,perl = TRUE)
+            li <- gsub("\\)","\\\\)",li,perl = TRUE)
             dfList[[listnr]] <-d1
-            df[val,1] <-gsub(li,paste('dfList[[',listnr,']]',sep = ''),df[val,1],perl = TRUE)
-            d1
+            df[val,1] <-gsub(li,paste('(dfList[[',listnr,']])',sep = ''),df[val,1],perl = TRUE)
             rm(d1)
             rm(li)
           }
