@@ -8,3 +8,4 @@ LazyData: true
 RoxygenNote: 7.0.2
 Imports: RODBC, stringr
 Suggests: dplyr, lubridate
+Encoding: UTF-8
